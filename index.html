@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="uk">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="index.js" type="module" defer></script>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Лінійне завантаження зображень</h1>
+      <p class="lead">
+        Демонстрація завантаження лише видимих зображень за допомогою <code>IntersectionObserver</code>.
+        Можна перемикатися між режимами: автозавантаження при появі у в’юпорті або завантаження по кліку.
+      </p>
+
+      <div class="controls">
+        <label class="toggle">
+          <input id="modeToggle" type="checkbox" />
+          <span>Режим: <strong id="modeLabel">авто (on-scroll)</strong></span>
+        </label>
+        <button id="loadAllBtn">Завантажити всі зараз</button>
+        <button id="disconnectObserverBtn" title="Зупинити IntersectionObserver">
+          Зупинити спостереження
+        </button>
+      </div>
+
+      <div class="spacer">Прокрутіть нижче, щоб почати підвантаження…</div>
+
+      <section class="grid" id="gallery">
+        <!--
+          Кожна картка використовує <picture> для опціональної оптимізації WebP.
+          <img> обов’язково має data-src. Можна також додати data-srcset та data-sizes.
+          data-load визначає режим:
+            - "scroll" (за замовчуванням) — завантажувати, коли з’явиться у в’юпорті
+            - "click" — показати кнопку "Завантажити" і вантажити тільки по кліку
+        -->
+
+        <!-- Приклад 1: велике фото у WebP + резервний JPEG -->
+        <article class="card">
+          <div class="skeleton">
+            <picture>
+              <source type="image/webp"
+                data-srcset="https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=1600&auto=format&fit=crop&q=60&fm=webp 1600w,
+                             https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=1000&auto=format&fit=crop&q=60&fm=webp 1000w,
+                             https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=600&auto=format&fit=crop&q=60&fm=webp 600w">
+              <img
+                class="lazy"
+                alt="Гори на світанку"
+                data-src="https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=1600&auto=format&fit=crop&q=70"
+                data-srcset="https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=1600&auto=format&fit=crop&q=70 1600w,
+                              https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=1000&auto=format&fit=crop&q=70 1000w,
+                              https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=600&auto=format&fit=crop&q=70 600w"
+                data-sizes="(min-width: 920px) 920px, 100vw"
+                data-load="scroll"
+                loading="lazy" />
+            </picture>
+          </div>
+          <div class="meta">
+            <small>Автозавантаження при скролі</small>
+            <button class="btn load-now" hidden>Завантажити</button>
+          </div>
+        </article>
+
+        <!-- Приклад 2: навмисно "важке" JPG, режим по кліку -->
+        <article class="card">
+          <div class="skeleton">
+            <img
+              class="lazy"
+              alt="Міський пейзаж"
+              data-src="https://images.unsplash.com/photo-1491553895911-0055eca6402d?w=2000&auto=format&fit=crop&q=85"
+              data-load="click" />
+          </div>
+          <div class="meta">
+            <small>Завантаження по кліку</small>
+            <button class="btn load-now">Завантажити</button>
+          </div>
+        </article>
+
+        <!-- Приклад 3: ще одне фото з WebP + srcset -->
+        <article class="card">
+          <div class="skeleton">
+            <picture>
+              <source type="image/webp"
+                data-srcset="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1600&auto=format&fit=crop&q=60&fm=webp 1600w,
+                             https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1000&auto=format&fit=crop&q=60&fm=webp 1000w,
+                             https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=600&auto=format&fit=crop&q=60&fm=webp 600w">
+              <img
+                class="lazy"
+                alt="Океан і хвилі"
+                data-src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1600&auto=format&fit=crop&q=70"
+                data-srcset="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1600&auto=format&fit=crop&q=70 1600w,
+                              https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1000&auto=format&fit=crop&q=70 1000w,
+                              https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=600&auto=format&fit=crop&q=70 600w"
+                data-sizes="(min-width: 920px) 920px, 100vw"
+                data-load="scroll" />
+            </picture>
+          </div>
+          <div class="meta">
+            <small>Автозавантаження при скролі</small>
+            <button class="btn load-now" hidden>Завантажити</button>
+          </div>
+        </article>
+
+      </section>
+
+      <div class="spacer">Кінець демо.</div>
+    </div>
+
+    <!-- Підключення окремого модуля з логікою -->
+    <script type="module" src="./lazy.js"></script>
+  </body>
+</html>

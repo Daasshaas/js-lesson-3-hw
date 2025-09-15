@@ -1,0 +1,137 @@
+     /* Базові стилі сторінки */
+      :root {
+        --placeholder-bg: #f0f0f0;
+        --skeleton-sheen: rgba(255,255,255,0.6);
+        --card-max: 920px;
+      }
+      html, body {
+        margin: 0;
+        font-family: system-ui, -apple-system, "Segoe UI", Roboto, Ubuntu, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji";
+        background: #fafafa;
+        color: #111;
+      }
+      .container {
+        max-width: var(--card-max);
+        margin: 0 auto;
+        padding: 24px 16px 96px;
+      }
+      h1 { margin: 0 0 8px; font-size: 1.8rem; }
+      p.lead { margin: 0 0 16px; color: #444; }
+
+      /* Панель керування режимами завантаження */
+      .controls {
+        position: sticky;
+        top: 0;
+        background: #fff;
+        border: 1px solid #e9e9e9;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.04);
+        border-radius: 12px;
+        padding: 12px;
+        margin: 16px 0 24px;
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+        z-index: 5;
+      }
+      .controls > * { font-size: 14px; }
+      button, .toggle {
+        cursor: pointer;
+        border: 1px solid #e0e0e0;
+        background: #fff;
+        border-radius: 999px;
+        padding: 8px 14px;
+      }
+      button:hover, .toggle:hover { background: #f7f7f7; }
+
+      /* Сітка карток із зображеннями */
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+        gap: 16px;
+      }
+      .card {
+        border: 1px solid #eaeaea;
+        background: #fff;
+        border-radius: 14px;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        box-shadow: 0 8px 24px rgba(0,0,0,0.04);
+      }
+      .card .meta {
+        padding: 10px 12px;
+        display: grid;
+        grid-template-columns: 1fr auto;
+        gap: 8px;
+        align-items: center;
+      }
+      .meta small { color: #666; }
+
+      /* Вимога завдання: мінімальна висота та фоновий колір для ще не завантажених зображень */
+      img.lazy {
+        height: 200px;            
+        width: 100%;
+        display: block;
+        object-fit: cover;
+        background-color: var(--placeholder-bg);
+        transition: opacity 300ms ease;
+        opacity: 0;                  /* поки не завантажене */
+      }
+
+      /* Скелет-заповнювач (анімація) поверх <img> до моменту повного завантаження */
+      .skeleton {
+        position: relative;
+        overflow: hidden;
+      }
+      .skeleton::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background:
+          linear-gradient(90deg,
+            rgba(0,0,0,0) 0%,
+            var(--skeleton-sheen) 50%,
+            rgba(0,0,0,0) 100%);
+        transform: translateX(-100%);
+        animation: shimmer 1.6s infinite;
+        mix-blend-mode: overlay;
+      }
+      @keyframes shimmer {
+        100% { transform: translateX(100%); }
+      }
+
+      /* Коли зображення завантажено — проявляємо та ховаємо скелет */
+      img.loaded {
+        opacity: 1;
+      }
+      .skeleton.loaded::before {
+        display: none;
+      }
+
+      /* Кнопки в картці */
+      .btn {
+        border: 1px solid #e0e0e0;
+        background: #fff;
+        border-radius: 8px;
+        padding: 6px 10px;
+        font-size: 13px;
+        cursor: pointer;
+      }
+      .btn:hover { background: #f7f7f7; }
+
+      /* Декоративний спейсер, щоб було що скролити */
+      .spacer {
+        height: 60vh;
+        display: grid;
+        place-items: center;
+        color: #777;
+        border: 1px dashed #e3e3e3;
+        background: #fff;
+        border-radius: 12px;
+        margin: 16px 0;
+      }
+
+      /* Адаптивні дрібниці */
+      @media (max-width: 480px) {
+        .controls { gap: 8px; }
+      }
